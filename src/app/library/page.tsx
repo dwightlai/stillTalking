@@ -20,19 +20,14 @@ export default async function LibraryPage({
   return (
     <section style={{ padding: "56px 0 72px" }}>
       <div className="container">
-        <div style={{ maxWidth: 820 }}>
+        <div className="library-intro">
           <div className="eyebrow">The Still Talking Library</div>
           <h1
-            className="serif"
-            style={{
-              fontSize: "clamp(3.2rem, 8vw, 6.2rem)",
-              lineHeight: 0.93,
-              margin: "12px 0 22px",
-            }}
+            className="serif library-title"
           >
             One family question at a time.
           </h1>
-          <p style={{ color: "var(--muted)", fontSize: 19, lineHeight: 1.65 }}>
+          <p className="library-description">
             Search {articles.length} articles about boundaries, money, work,
             relationships, digital life, and rebuilding trust with an adult child.
           </p>
@@ -44,6 +39,31 @@ export default async function LibraryPage({
           focusSearch={focus === "search"}
         />
       </div>
+      <style>{`
+        .library-intro { max-width:1100px; }
+        .library-title {
+          max-width:1100px;
+          margin:12px 0 22px;
+          font-size:70px;
+          line-height:1;
+          letter-spacing:0;
+          text-wrap:balance;
+        }
+        .library-description {
+          max-width:820px;
+          margin:0;
+          color:var(--muted);
+          font-size:19px;
+          line-height:1.65;
+        }
+        @media(max-width:900px) {
+          .library-title { font-size:56px; }
+        }
+        @media(max-width:620px) {
+          .library-title { font-size:44px; line-height:1.04; }
+          .library-description { font-size:17px; }
+        }
+      `}</style>
     </section>
   );
 }
