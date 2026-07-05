@@ -1,0 +1,71 @@
+import fs from "node:fs";
+import path from "node:path";
+import matter from "gray-matter";
+
+const directory = path.join(process.cwd(), "content", "articles");
+const files = fs.readdirSync(directory).filter((file) => file.endsWith(".mdx"));
+const records = files.map((file) => {
+  const source = fs.readFileSync(path.join(directory, file), "utf8");
+  const { data, content } = matter(source);
+  return {
+    file,
+    data,
+    words: content.trim().split(/\s+/).filter(Boolean).length,
+  };
+});
+
+const errors = [];
+const required = [
+  "title",
+  "description",
+  "category",
+  "pillar",
+  "status",
+  "publishedAt",
+  "readingTime",
+  "image",
+  "imageAlt",
+  "cardQuote",
+];
+
+for (const record of records) {
+  for (const field of required) {
+    if (!record.data[field]) errors.push(`${record.file}: missing ${field}`);
+  }
+  if (record.data.status !== "published") {
+    errors.push(`${record.file}: public content must have status "published"`);
+  }
+  if (record.data.generated || record.data.reviewStatus) {
+    errors.push(`${record.file}: generated/editorial-draft metadata is not allowed`);
+  }
+  if (record.words < 600) {
+    errors.push(`${record.file}: ${record.words} words; minimum is 600`);
+  }
+  const imagePath = path.join(process.cwd(), "public", record.data.image ?? "");
+  if (!record.data.image?.startsWith("/images/") || !fs.existsSync(imagePath)) {
+    errors.push(`${record.file}: referenced illustration does not exist in public/images`);
+  }
+}
+
+for (const field of ["title", "description", "cardQuote", "image", "imageAlt"]) {
+  const seen = new Map();
+  for (const record of records) {
+    const value = record.data[field];
+    if (seen.has(value)) {
+      errors.push(`${record.file}: duplicate ${field} also used by ${seen.get(value)}`);
+    }
+    seen.set(value, record.file);
+  }
+}
+
+if (errors.length) {
+  console.error(errors.join("\n"));
+  process.exit(1);
+}
+
+console.log(`Content check passed: ${records.length} published articles.`);
+console.log(
+  `Word range: ${Math.min(...records.map(({ words }) => words))}-${Math.max(
+    ...records.map(({ words }) => words),
+  )}.`,
+);
