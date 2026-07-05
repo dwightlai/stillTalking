@@ -37,16 +37,53 @@ export async function POST(request: Request) {
       typeof body?.source === "string" && body.source.startsWith("/")
         ? body.source
         : "/";
-    const kitResponse = await fetch(
-      `https://api.kit.com/v4/forms/${encodeURIComponent(kitFormId)}/subscribers`,
+    const kitHeaders = {
+      "Content-Type": "application/json",
+      "X-Kit-Api-Key": kitApiKey,
+    };
+    const createResponse = await fetch(
+      "https://api.kit.com/v4/subscribers",
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Kit-Api-Key": kitApiKey,
-        },
+        headers: kitHeaders,
         body: JSON.stringify({
           email_address: email,
+          state: "inactive",
+        }),
+        cache: "no-store",
+        signal: AbortSignal.timeout(10_000),
+      },
+    ).catch(() => null);
+
+    if (!createResponse?.ok) {
+      console.error("Kit subscriber creation failed", {
+        status: createResponse?.status ?? "network_error",
+      });
+      return NextResponse.json(
+        { message: "We could not add you right now. Please try again." },
+        { status: 502 },
+      );
+    }
+
+    const createResult = (await createResponse.json().catch(() => null)) as {
+      subscriber?: { id?: number };
+    } | null;
+    const subscriberId = createResult?.subscriber?.id;
+
+    if (!subscriberId) {
+      console.error("Kit subscriber creation returned no subscriber ID");
+      return NextResponse.json(
+        { message: "We could not add you right now. Please try again." },
+        { status: 502 },
+      );
+    }
+
+    const formResponse = await fetch(
+      `https://api.kit.com/v4/forms/${encodeURIComponent(kitFormId)}/subscribers/${subscriberId}`,
+      {
+        method: "POST",
+        headers: kitHeaders,
+        body: JSON.stringify({
           referrer: new URL(source, siteUrl).toString(),
         }),
         cache: "no-store",
@@ -54,7 +91,10 @@ export async function POST(request: Request) {
       },
     ).catch(() => null);
 
-    if (!kitResponse?.ok) {
+    if (!formResponse?.ok) {
+      console.error("Kit form subscription failed", {
+        status: formResponse?.status ?? "network_error",
+      });
       return NextResponse.json(
         { message: "We could not add you right now. Please try again." },
         { status: 502 },
@@ -76,6 +116,6 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({
-    message: "You are on the list. Look for the first note soon.",
+    message: "Check your inbox to confirm your subscription.",
   });
 }
