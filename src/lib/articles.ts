@@ -32,7 +32,11 @@ export const getAllArticles = cache((): ArticleMeta[] => {
       return { slug, ...data } as ArticleMeta;
     })
     .filter((article) => article.status === "published")
-    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+    .sort(
+      (a, b) =>
+        b.publishedAt.localeCompare(a.publishedAt) ||
+        a.title.localeCompare(b.title, "en"),
+    );
 });
 
 export function getArticle(slug: string) {

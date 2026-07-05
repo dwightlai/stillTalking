@@ -5,7 +5,7 @@ import { getAllArticles, pillarDescriptions } from "@/lib/articles";
 export const metadata: Metadata = {
   title: "Article Library",
   description:
-    "Browse more than 500 practical guides for parents of adult children.",
+    "Browse practical guides for parents of adult children, ordered newest first.",
 };
 
 export default async function LibraryPage({
