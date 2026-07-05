@@ -22,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...getAllArticles().map((article) => ({
       url: `${siteUrl}/articles/${article.slug}`,
-      lastModified: new Date(article.publishedAt),
+      lastModified: new Date(article.updatedAt),
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),

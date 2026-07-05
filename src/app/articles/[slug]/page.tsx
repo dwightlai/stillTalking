@@ -30,6 +30,7 @@ export async function generateMetadata({
           title: article.meta.title,
           description: article.meta.description,
           publishedTime: article.meta.publishedAt,
+          modifiedTime: article.meta.updatedAt,
           images: [{ url: article.meta.image, alt: article.meta.imageAlt }],
         },
         twitter: {
@@ -60,7 +61,7 @@ export default async function ArticlePage({
     description: meta.description,
     image: `${siteUrl}${meta.image}`,
     datePublished: meta.publishedAt,
-    dateModified: meta.publishedAt,
+    dateModified: meta.updatedAt,
     author: { "@type": "Organization", name: "Still Talking Editors" },
     publisher: { "@type": "Organization", name: "Still Talking", url: siteUrl },
     mainEntityOfPage: articleUrl,
@@ -111,6 +112,16 @@ export default async function ArticlePage({
             <span>By Still Talking Editors</span>
             <span>{meta.readingTime}</span>
             <time>{new Date(meta.publishedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</time>
+            {meta.updatedAt !== meta.publishedAt && (
+              <span>
+                Updated{" "}
+                {new Date(meta.updatedAt).toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </span>
+            )}
           </div>
         </div>
       </header>
@@ -123,14 +134,47 @@ export default async function ArticlePage({
         </p>
       </div>
       <div style={{ width: "min(720px, calc(100% - 36px))", margin: "44px auto 0" }}>
+        <aside className="evidence-note">
+          <strong>Evidence note</strong>
+          <p>{meta.evidenceNote}</p>
+          {meta.exampleType === "composite" && (
+            <p>
+              The family scenes and dialogue in this article are composite
+              examples, not quotations from an identifiable family.
+            </p>
+          )}
+        </aside>
         <div className="prose">
           <MDXRemote source={content} components={{ BookLink }} />
         </div>
+        <section className="article-sources" aria-labelledby="article-sources-title">
+          <div className="eyebrow">Reporting notes</div>
+          <h2 id="article-sources-title" className="serif">Sources &amp; further reading</h2>
+          <ul>
+            {meta.sources.map((source) => (
+              <li key={source.url}>
+                <a href={source.url} target="_blank" rel="noopener noreferrer">
+                  {source.title}
+                </a>
+                <span>{source.publisher}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
         <ShareCard title={meta.title} quote={meta.cardQuote} url={articleUrl} />
       </div>
       <style>{`
         .article-breadcrumb { display:flex; flex-wrap:wrap; gap:8px; color:var(--muted); font-size:13px; margin-bottom:24px; }
         .article-breadcrumb a { text-decoration:underline; text-underline-offset:3px; }
+        .evidence-note { border-left:3px solid var(--teal); padding:4px 0 4px 18px; margin-bottom:36px; color:var(--muted); }
+        .evidence-note strong { color:var(--ink); font-size:13px; text-transform:uppercase; }
+        .evidence-note p { font-size:14px; line-height:1.6; margin:7px 0 0; }
+        .article-sources { border-top:1px solid var(--line); margin-top:42px; padding-top:28px; }
+        .article-sources h2 { font-size:28px; margin:7px 0 18px; }
+        .article-sources ul { list-style:none; margin:0; padding:0; }
+        .article-sources li { border-top:1px solid var(--line); padding:14px 0; display:grid; gap:4px; }
+        .article-sources a { color:var(--teal-dark); font-weight:700; text-decoration:underline; text-underline-offset:3px; }
+        .article-sources span { color:var(--muted); font-size:12px; }
       `}</style>
     </article>
   );

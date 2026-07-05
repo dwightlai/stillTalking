@@ -16,6 +16,15 @@ export type ArticleMeta = {
   cardQuote: string;
   pillar?: string;
   intent?: string;
+  updatedAt: string;
+  contentType: "guide" | "q-and-a" | "narrative" | "research";
+  exampleType: "composite" | "reported" | "none";
+  evidenceNote: string;
+  sources: Array<{
+    title: string;
+    publisher: string;
+    url: string;
+  }>;
   status: "published";
 };
 

@@ -15,6 +15,12 @@ const records = files.map((file) => {
 });
 
 const errors = [];
+const today = new Intl.DateTimeFormat("sv-SE", {
+  timeZone: "Asia/Shanghai",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+}).format(new Date());
 const required = [
   "title",
   "description",
@@ -22,6 +28,11 @@ const required = [
   "pillar",
   "status",
   "publishedAt",
+  "updatedAt",
+  "contentType",
+  "exampleType",
+  "evidenceNote",
+  "sources",
   "readingTime",
   "image",
   "imageAlt",
@@ -40,6 +51,34 @@ for (const record of records) {
   }
   if (record.words < 600) {
     errors.push(`${record.file}: ${record.words} words; minimum is 600`);
+  }
+  if (record.data.publishedAt > today) {
+    errors.push(`${record.file}: publishedAt cannot be in the future`);
+  }
+  if (
+    record.data.updatedAt < record.data.publishedAt ||
+    record.data.updatedAt > today
+  ) {
+    errors.push(`${record.file}: updatedAt must be between publishedAt and today`);
+  }
+  if (!["guide", "q-and-a", "narrative", "research"].includes(record.data.contentType)) {
+    errors.push(`${record.file}: invalid contentType`);
+  }
+  if (!["composite", "reported", "none"].includes(record.data.exampleType)) {
+    errors.push(`${record.file}: invalid exampleType`);
+  }
+  if (
+    !Array.isArray(record.data.sources) ||
+    record.data.sources.length === 0 ||
+    record.data.sources.some(
+      (source) =>
+        !source?.title ||
+        !source?.publisher ||
+        typeof source?.url !== "string" ||
+        !source.url.startsWith("https://"),
+    )
+  ) {
+    errors.push(`${record.file}: at least one complete HTTPS source is required`);
   }
   const imagePath = path.join(process.cwd(), "public", record.data.image ?? "");
   if (!record.data.image?.startsWith("/images/") || !fs.existsSync(imagePath)) {
