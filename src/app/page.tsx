@@ -39,7 +39,7 @@ export default function Home() {
             For parents of adult children
           </div>
           <div className="lead-grid">
-            <div style={{ position: "relative", minHeight: 445, background: "#e5e8e4" }}>
+            <div className="lead-image">
               <Image
                 src={lead.image}
                 alt={lead.imageAlt}
@@ -49,20 +49,20 @@ export default function Home() {
                 style={{ objectFit: "cover" }}
               />
             </div>
-            <div style={{ alignSelf: "center", padding: "22px 0 22px 24px" }}>
+            <div className="lead-copy">
               <div className="eyebrow">{lead.category}</div>
               <h1
-                className="serif"
+                className="serif lead-title"
                 style={{
-                  fontSize: "clamp(2.55rem, 5vw, 4.8rem)",
-                  lineHeight: 0.98,
-                  margin: "14px 0 20px",
-                  maxWidth: 560,
+                  fontSize: "clamp(2.5rem, 3.7vw, 3.65rem)",
+                  lineHeight: 1.02,
+                  margin: "16px 0 18px",
+                  maxWidth: 620,
                 }}
               >
                 {lead.title}
               </h1>
-              <p style={{ color: "var(--muted)", fontSize: 18, lineHeight: 1.62, maxWidth: 510 }}>
+              <p style={{ color: "var(--muted)", fontSize: 17, lineHeight: 1.58, maxWidth: 600, margin: 0 }}>
                 {lead.description}
               </p>
               <Link
@@ -72,7 +72,7 @@ export default function Home() {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: 10,
-                  marginTop: 14,
+                  marginTop: 18,
                   color: "var(--teal-dark)",
                   fontWeight: 800,
                 }}
@@ -200,7 +200,10 @@ export default function Home() {
       </section>
 
       <style>{`
-        .lead-grid { display:grid; grid-template-columns: 1.08fr .92fr; gap:42px; }
+        .lead-grid { display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr); gap:48px; align-items:start; }
+        .lead-image { position:relative; aspect-ratio:4/3; min-width:0; background:#e5e8e4; }
+        .lead-copy { min-width:0; padding-top:2px; }
+        .lead-title { text-wrap:balance; letter-spacing:0; }
         .starter-grid { display:grid; grid-template-columns:1.15fr repeat(3, 1fr); gap:26px; align-items:center; }
         .starter-item { display:grid; grid-template-columns:auto 1fr; gap:12px; border-left:1px solid var(--line); padding-left:22px; }
         .starter-item p { color:var(--muted); font-size:13px; line-height:1.45; margin:6px 0 0; }
@@ -226,8 +229,8 @@ export default function Home() {
         .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
         @media (max-width: 900px) {
           .lead-grid { grid-template-columns:1fr; gap:22px; }
-          .lead-grid > div:first-child { min-height:360px !important; }
-          .lead-grid > div:last-child { padding-left:0 !important; }
+          .lead-image { aspect-ratio:16/10; }
+          .lead-copy { padding-top:0; }
           .starter-grid { grid-template-columns:1fr 1fr; }
           .starter-item { border-left:0; padding:18px 0; border-top:1px solid var(--line); }
           .article-grid { grid-template-columns:1fr 1fr; }
@@ -237,7 +240,7 @@ export default function Home() {
           .newsletter { grid-template-columns:1fr; }
         }
         @media (max-width: 620px) {
-          .lead-grid > div:first-child { min-height:280px !important; }
+          .lead-image { aspect-ratio:4/3; }
           .starter-grid, .article-grid { grid-template-columns:1fr; }
           .library-callout { padding:28px 22px; }
           .library-number { font-size:64px; }
