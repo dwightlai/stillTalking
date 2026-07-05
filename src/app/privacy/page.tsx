@@ -25,10 +25,16 @@ export default function PrivacyPage() {
         </p>
         <h2>Cookies and analytics</h2>
         <p>
-          The current site does not use advertising cookies or cross-site
-          tracking. If non-essential analytics or advertising tools are added,
-          this notice and the consent controls will be updated before those
-          tools are enabled.
+          We use Umami Cloud to understand aggregate visits, referrers, devices,
+          and page performance. Umami does not use cookies or collect personally
+          identifiable information.
+        </p>
+        <p>
+          We also use Microsoft Clarity to understand interactions through
+          heatmaps and session recordings. Sensitive content is masked. Clarity
+          receives an analytics-storage consent signal from our preference
+          notice; advertising storage is always denied. Choosing “Essential
+          only” keeps analytics storage denied.
         </p>
         <h2>Your choices</h2>
         <p>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { AnalyticsScripts } from "@/components/analytics-scripts";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -39,6 +40,7 @@ export default function RootLayout({
         <SiteHeader />
         <main id="main-content">{children}</main>
         <SiteFooter />
+        <AnalyticsScripts />
       </body>
     </html>
   );
