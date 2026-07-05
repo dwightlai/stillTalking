@@ -9,6 +9,43 @@ const categoryNames: Record<string, string> = {
   guides: "Guides",
 };
 
+const topicTaxonomy: Record<
+  string,
+  { categories: string[]; pillars: string[] }
+> = {
+  relationships: {
+    categories: [
+      "Relationships",
+      "Communication",
+      "Family Repair",
+      "Love & Partnership",
+    ],
+    pillars: [
+      "Communication",
+      "Family Repair",
+      "Love and Partnership",
+      "Family Expectations",
+      "Parent Transitions",
+    ],
+  },
+  boundaries: {
+    categories: ["Boundaries"],
+    pillars: ["Boundaries", "Digital Life", "Independent Living"],
+  },
+  "money-work": {
+    categories: ["Money & Work"],
+    pillars: [
+      "Money and Support",
+      "Career and Education",
+      "Independent Living",
+    ],
+  },
+  guides: {
+    categories: ["Guides"],
+    pillars: ["Communication", "Family Repair"],
+  },
+};
+
 export function generateStaticParams() {
   return Object.keys(categoryNames).map((slug) => ({ slug }));
 }
@@ -21,10 +58,11 @@ export default async function TopicPage({
   const { slug } = await params;
   const title = categoryNames[slug];
   if (!title) notFound();
+  const taxonomy = topicTaxonomy[slug];
   const articles = getAllArticles().filter(
     (article) =>
-      article.category.toLowerCase().replaceAll(" & ", "-").replaceAll(" ", "-") === slug ||
-      (slug === "relationships" && article.category === "Relationships"),
+      taxonomy.categories.includes(article.category) ||
+      (article.pillar ? taxonomy.pillars.includes(article.pillar) : false),
   );
 
   return (
