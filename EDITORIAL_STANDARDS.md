@@ -2,6 +2,36 @@
 
 This file is a publishing gate, not a style suggestion.
 
+## Rule zero: real detail before polish
+
+The first test of every Still Talking article is whether it contains enough
+specific, grounded detail to feel observed rather than generated.
+
+Every article must include at least one meaningful human element:
+
+- a verified firsthand detail supplied with permission;
+- a clearly labeled composite scenario built from common, plausible situations;
+- a concrete contemporary American setting with behavior a reader can picture;
+- a natural exchange that a real parent and adult child could say aloud; or
+- a relevant finding from a traceable primary study, government dataset, or
+  authoritative survey, explained in ordinary language.
+
+The detail must do real editorial work. Decorative names, arbitrary cities,
+invented occupations, fake reader letters, unsupported personal memories, and
+unverifiable anecdotes do not count. Never manufacture specificity merely to
+make generated writing appear human.
+
+Before publication, an editor must be able to answer:
+
+1. What will the reader picture or remember from this article?
+2. Where did that detail come from?
+3. Is its status clear: verified, sourced, or explicitly composite?
+4. Could this detail be moved unchanged into another article? If yes, it is
+   probably too generic.
+
+An article that fails this test remains a draft, regardless of grammar,
+structure, SEO value, illustration quality, or word count.
+
 ## Non-negotiable rule
 
 Still Talking publishes fewer, better articles. We do not publish template
@@ -21,6 +51,10 @@ inflate the size of the library.
 9. Give the reader a concrete next step without promising a guaranteed outcome.
 10. Receive a human editorial review for reasoning, cultural context, tone,
     originality, and factual accuracy before publication.
+11. Identify its author, content format, last review date, and at least one
+    verifiable source or confirmed firsthand element.
+12. Label composite scenarios clearly and never present an invented example as
+    a reader submission, interview, or personal memory.
 
 ## Voice and cultural adaptation
 
@@ -88,6 +122,8 @@ Reject an article when any of the following is true:
 - Its paragraphs could be moved to another topic by changing a few nouns.
 - It repeats the same section headings or conversation script used elsewhere.
 - It invents research, statistics, credentials, interviews, or publication dates.
+- It uses a future publication date or backdates a new article to simulate an
+  established publishing history.
 - It imitates or lightly rewrites a source article.
 - It uses a composite example without labeling it.
 - It diagnoses a person or gives individualized medical, legal, therapeutic, or
