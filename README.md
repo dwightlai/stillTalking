@@ -33,5 +33,5 @@ articles and reused illustrations are rejected.
 ## Environment
 
 Copy `.env.example` into the environment configuration used by the deployment.
-Set `NEXT_PUBLIC_SITE_URL` to the production URL and configure a newsletter
-provider before accepting production subscriptions.
+Set `NEXT_PUBLIC_SITE_URL` to the production URL. Newsletter signup uses Kit
+API v4 and requires the server-only `KIT_API_KEY` and `KIT_FORM_ID` variables.

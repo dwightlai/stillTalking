@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <div className="container privacy-page">
-      <div className="eyebrow">Last updated July 6, 2026</div>
+      <div className="eyebrow">Last updated July 5, 2026</div>
       <h1 className="serif">Privacy</h1>
       <div className="prose">
         <p>
@@ -18,10 +18,11 @@ export default function PrivacyPage() {
         </p>
         <h2>Email providers</h2>
         <p>
-          In production, subscription data may be processed by the email
-          provider identified on the signup form or in the email footer. We do
-          not sell email addresses. Every marketing email will include an
-          unsubscribe method.
+          Newsletter subscriptions are processed by Kit, formerly ConvertKit.
+          Kit receives the email address and the page where the signup
+          occurred so it can manage the subscription and deliver requested
+          emails. We do not sell email addresses. Every newsletter email
+          includes an unsubscribe method.
         </p>
         <h2>Cookies and analytics</h2>
         <p>
@@ -39,8 +40,8 @@ export default function PrivacyPage() {
         <h2>Your choices</h2>
         <p>
           You may unsubscribe through any newsletter email. Requests to access
-          or delete subscription data can be sent to the contact address listed
-          in the newsletter footer once the production email service launches.
+          or delete subscription data can be sent to the contact address in the
+          newsletter footer.
         </p>
       </div>
       <style>{`

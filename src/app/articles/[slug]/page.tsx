@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { BookLink } from "@/components/book-link";
 import { ShareCard } from "@/components/share-card";
 import { getAllArticles, getArticle } from "@/lib/articles";
 
@@ -123,7 +124,7 @@ export default async function ArticlePage({
       </div>
       <div style={{ width: "min(720px, calc(100% - 36px))", margin: "44px auto 0" }}>
         <div className="prose">
-          <MDXRemote source={content} />
+          <MDXRemote source={content} components={{ BookLink }} />
         </div>
         <ShareCard title={meta.title} quote={meta.cardQuote} url={articleUrl} />
       </div>

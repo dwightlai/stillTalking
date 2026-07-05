@@ -5,8 +5,20 @@ import { NextResponse } from "next/server";
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: Request) {
-  const body = (await request.json().catch(() => null)) as { email?: unknown } | null;
-  const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
+  const body = (await request.json().catch(() => null)) as {
+    email?: unknown;
+    company?: unknown;
+    source?: unknown;
+  } | null;
+  const email =
+    typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
+
+  // Bots commonly fill hidden fields that people never see.
+  if (body?.company) {
+    return NextResponse.json({
+      message: "You are on the list. Look for the first note soon.",
+    });
+  }
 
   if (!emailPattern.test(email) || email.length > 254) {
     return NextResponse.json(
@@ -15,19 +27,34 @@ export async function POST(request: Request) {
     );
   }
 
-  const providerUrl = process.env.NEWSLETTER_PROVIDER_URL;
-  if (providerUrl) {
-    const providerResponse = await fetch(providerUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(process.env.NEWSLETTER_API_KEY
-          ? { Authorization: `Bearer ${process.env.NEWSLETTER_API_KEY}` }
-          : {}),
+  const kitApiKey = process.env.KIT_API_KEY;
+  const kitFormId = process.env.KIT_FORM_ID;
+
+  if (kitApiKey && kitFormId) {
+    const siteUrl =
+      process.env.NEXT_PUBLIC_SITE_URL ?? "https://stilltalkingfamily.com";
+    const source =
+      typeof body?.source === "string" && body.source.startsWith("/")
+        ? body.source
+        : "/";
+    const kitResponse = await fetch(
+      `https://api.kit.com/v4/forms/${encodeURIComponent(kitFormId)}/subscribers`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Kit-Api-Key": kitApiKey,
+        },
+        body: JSON.stringify({
+          email_address: email,
+          referrer: new URL(source, siteUrl).toString(),
+        }),
+        cache: "no-store",
+        signal: AbortSignal.timeout(10_000),
       },
-      body: JSON.stringify({ email }),
-    });
-    if (!providerResponse.ok) {
+    ).catch(() => null);
+
+    if (!kitResponse?.ok) {
       return NextResponse.json(
         { message: "We could not add you right now. Please try again." },
         { status: 502 },

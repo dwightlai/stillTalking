@@ -45,6 +45,25 @@ is warm, conversational, and practical.
 - Conversational does not mean careless: claims must remain accurate, examples
   must be plausible, and advice must not overpromise.
 
+## External reading links
+
+Book and resource links exist to help the reader go deeper, not to fill space
+or manufacture a sales opportunity.
+
+- Add a link only when the resource directly extends the argument in the
+  surrounding paragraph.
+- Introduce the resource in natural editorial language. Do not use urgency,
+  sales claims, price language, or calls such as "buy now."
+- Never imply that reading or purchasing a book guarantees a family outcome.
+- Use the shared book-link registry rather than placing retailer URLs directly
+  throughout article files. This keeps titles, destinations, and any future
+  affiliate changes auditable in one place.
+- Amazon links remain untagged until an Associates account is approved and the
+  site's disclosure is updated. Affiliate links must use the appropriate
+  sponsored relationship attribute and a clear reader-facing disclosure.
+- A useful article must stand on its own even if the reader never opens or
+  purchases the linked resource.
+
 ## Illustration standard
 
 Every published article must have its own original editorial illustration.

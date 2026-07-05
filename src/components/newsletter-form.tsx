@@ -15,7 +15,11 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
     const response = await fetch("/api/subscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: form.get("email") }),
+      body: JSON.stringify({
+        email: form.get("email"),
+        company: form.get("company"),
+        source: window.location.pathname,
+      }),
     });
     const result = (await response.json()) as { message: string };
     setStatus(response.ok ? "success" : "error");
@@ -37,9 +41,20 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
         placeholder="Email address"
         aria-describedby={message ? `${compact ? "resource-" : ""}subscribe-status` : undefined}
       />
+      <input
+        className="signup-honeypot"
+        name="company"
+        type="text"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+      />
       <button type="submit" disabled={status === "saving"}>
         {status === "saving" ? "Joining..." : "Subscribe"}
       </button>
+      <p className="subscribe-note">
+        One thoughtful email at a time. Unsubscribe whenever you choose.
+      </p>
       <p
         id={`${compact ? "resource-" : ""}subscribe-status`}
         className={`form-status ${status}`}
@@ -52,6 +67,8 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
         .subscribe-form input { min-width:0; border:1px solid transparent; padding:14px 15px; background:white; color:var(--ink); }
         .subscribe-form button { border:0; padding:14px 18px; font-weight:800; background:var(--coral); color:white; }
         .subscribe-form button:disabled { opacity:.7; cursor:wait; }
+        .signup-honeypot { position:absolute !important; left:-10000px !important; width:1px !important; height:1px !important; }
+        .subscribe-note { grid-column:1/-1; margin:0; font-size:11px; line-height:1.45; color:#aebdc4; }
         .form-status { grid-column:1/-1; min-height:18px; margin:0; font-size:13px; color:#d5e2e6; }
         .form-status.error { color:#ffd1ca; }
         .subscribe-form.compact { max-width:540px; margin-top:20px; }
