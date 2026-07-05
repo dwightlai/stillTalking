@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllArticles } from "@/lib/articles";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://still-talking.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://stilltalkingfamily.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = ["", "/about", "/library", "/resources", "/disclosure", "/privacy"];

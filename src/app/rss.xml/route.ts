@@ -1,6 +1,6 @@
 import { getAllArticles } from "@/lib/articles";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://still-talking.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://stilltalkingfamily.com";
 
 function escapeXml(value: string) {
   return value

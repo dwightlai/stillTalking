@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://still-talking.vercel.app",
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://stilltalkingfamily.com",
   ),
   title: {
     default: "Still Talking",

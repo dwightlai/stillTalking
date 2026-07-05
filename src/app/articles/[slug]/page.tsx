@@ -50,7 +50,7 @@ export default async function ArticlePage({
   const article = getArticle(slug);
   if (!article) notFound();
   const { meta, content } = article;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://still-talking.vercel.app";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://stilltalkingfamily.com";
   const articleUrl = `${siteUrl}/articles/${slug}`;
   const jsonLd = {
     "@context": "https://schema.org",
