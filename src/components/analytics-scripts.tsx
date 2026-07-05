@@ -19,14 +19,23 @@ export function AnalyticsScripts() {
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
-      const saved = window.localStorage.getItem(consentKey);
+      let saved: string | null = null;
+      try {
+        saved = window.localStorage?.getItem(consentKey) ?? null;
+      } catch {
+        saved = null;
+      }
       setConsent(saved === "granted" || saved === "denied" ? saved : null);
     }, 0);
     return () => window.clearTimeout(timeout);
   }, []);
 
   function updateConsent(value: "granted" | "denied") {
-    window.localStorage.setItem(consentKey, value);
+    try {
+      window.localStorage?.setItem(consentKey, value);
+    } catch {
+      // Consent still applies to the current page when storage is unavailable.
+    }
     setConsent(value);
     window.clarity?.("consentv2", {
       ad_Storage: "denied",
@@ -34,14 +43,9 @@ export function AnalyticsScripts() {
     });
   }
 
-  const initialClarityConsent = `
+  const clarityLoader = `
     (function(c,l,a,r,i,t,y){
       c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      var saved=c.localStorage.getItem("${consentKey}");
-      c[a]("consentv2",{
-        ad_Storage:"denied",
-        analytics_Storage:saved==="granted"?"granted":"denied"
-      });
       t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
       y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window,document,"clarity","script",${JSON.stringify(clarityProjectId)});
@@ -63,7 +67,13 @@ export function AnalyticsScripts() {
         <Script
           id="microsoft-clarity"
           strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: initialClarityConsent }}
+          dangerouslySetInnerHTML={{ __html: clarityLoader }}
+          onReady={() =>
+            window.clarity?.("consentv2", {
+              ad_Storage: "denied",
+              analytics_Storage: consent === "granted" ? "granted" : "denied",
+            })
+          }
         />
       )}
       {clarityProjectId && consent === null && (
