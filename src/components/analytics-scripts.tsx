@@ -37,7 +37,7 @@ export function AnalyticsScripts() {
   const initialClarityConsent = `
     (function(c,l,a,r,i,t,y){
       c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      var saved=l.localStorage.getItem("${consentKey}");
+      var saved=c.localStorage.getItem("${consentKey}");
       c[a]("consentv2",{
         ad_Storage:"denied",
         analytics_Storage:saved==="granted"?"granted":"denied"
