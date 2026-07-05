@@ -22,6 +22,29 @@ inflate the size of the library.
 10. Receive a human editorial review for reasoning, cultural context, tone,
     originality, and factual accuracy before publication.
 
+## Voice and cultural adaptation
+
+Still Talking writes for American parents of adult children. The default voice
+is warm, conversational, and practical.
+
+- Write like an experienced, thoughtful friend, not an academic paper,
+  clinical report, or formal lecture.
+- Use recognizable situations from contemporary American family life and
+  dialogue that people would naturally say aloud.
+- Keep emotional warmth without using fear-based exaggeration, scolding,
+  moral judgment, or manufactured inspirational lines.
+- Give readers specific words they can say and realistic actions they can take.
+- Treat parents' worries with respect while keeping the adult child's feelings,
+  autonomy, and boundaries clearly in view.
+- Prefer plain, natural American English over clinical jargon, abstract
+  frameworks, and overly polished language.
+- When a non-English source supplies the initial idea, do not translate it
+  sentence by sentence. Preserve only the underlying question, then create a
+  new argument, structure, examples, dialogue, and conclusion for the American
+  audience.
+- Conversational does not mean careless: claims must remain accurate, examples
+  must be plausible, and advice must not overpromise.
+
 ## Illustration standard
 
 Every published article must have its own original editorial illustration.
