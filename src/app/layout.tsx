@@ -20,13 +20,13 @@ export const metadata: Metadata = {
     title: "Still Talking",
     description:
       "Practical guidance for parents who want to understand their adult children and stay close without overstepping.",
-    images: [{ url: "/images/home-conversation.png", width: 1536, height: 1024 }],
+    images: [{ url: "/images/home-conversation.webp", width: 1586, height: 992 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Still Talking",
     description: "Practical guidance for parents of adult children.",
-    images: ["/images/home-conversation.png"],
+    images: ["/images/home-conversation.webp"],
   },
 };
 

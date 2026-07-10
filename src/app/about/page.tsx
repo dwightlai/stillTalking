@@ -25,7 +25,7 @@ export default function AboutPage() {
           </div>
           <div className="about-image">
             <Image
-              src="/images/about-editorial-desk.png"
+              src="/images/about-editorial-desk.webp"
               alt="An editorial desk with research pages, a notebook, and two empty chairs representing both generations in the conversation"
               fill
               sizes="(max-width: 800px) 100vw, 45vw"
