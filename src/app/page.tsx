@@ -215,7 +215,7 @@ export default function Home() {
         .library-callout h2 { font-size:38px; line-height:1.1; margin:0 0 12px; }
         .library-callout a { display:inline-flex; gap:9px; align-items:center; color:#9fdadc; font-weight:800; margin-top:8px; }
         .pillar-heading { display:flex; align-items:end; justify-content:space-between; gap:40px; margin:8px 0 28px; }
-        .pillar-heading h2 { font-size:40px; line-height:1.08; max-width:650px; margin:0; }
+        .pillar-heading h2 { font-size:40px; line-height:1.08; max-width:650px; margin:0; text-wrap:balance; }
         .pillar-heading > p { color:var(--muted); max-width:360px; line-height:1.55; margin:0; }
         .pillar-grid { display:grid; grid-template-columns:repeat(5,1fr); border-top:1px solid var(--line); border-left:1px solid var(--line); }
         .pillar-item { min-height:210px; padding:22px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
