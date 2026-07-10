@@ -27,3 +27,13 @@
 - Career & Education: `career-advice-adult-child-can-use`
 - Money & Support: `financial-help-control`
 - Family Repair: `when-adult-child-moves-out`
+
+## Newsletter 邮件集成
+- 服务方：Resend（`api.resend.com/emails`）—— 2026-07-10 从 Kit 迁移
+- API key 权限：仅发邮件（restricted key，不能管 Contacts/Audience）
+- 前端：`src/components/newsletter-form.tsx` → POST `/api/subscribe`
+- 后端：`src/app/api/subscribe/route.ts` —— Resend 发 welcome 邮件 + 通知主人
+- 退订：`/unsubscribe` 页面 + `/api/unsubscribe` route
+- Vercel 环境变量：`RESEND_API_KEY`、`NEWSLETTER_NOTIFY_TO`（laidehua771104@gmail.com）
+- 旧 Kit 变量 `KIT_API_KEY`、`KIT_FORM_ID` 可清理
+- 待办：验证 `stilltalkingfamily.com` 域名后改 `RESEND_FROM_EMAIL`；如需自动管理列表加 Vercel KV

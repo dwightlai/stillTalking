@@ -5,6 +5,7 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const RESEND_FROM =
   process.env.RESEND_FROM_EMAIL ?? "Still Talking <onboarding@resend.dev>";
+const RESEND_AUDIENCE_ID = process.env.RESEND_AUDIENCE_ID;
 const NOTIFY_TO = process.env.NEWSLETTER_NOTIFY_TO ?? "";
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://stilltalkingfamily.com";
@@ -50,6 +51,11 @@ function notifyText(email: string, source: string): string {
   return `New newsletter subscriber:\n\nEmail: ${email}\nSource: ${source}\nTime: ${new Date().toISOString()}\n\n— Still Talking`;
 }
 
+const resendHeaders = () => ({
+  Authorization: `Bearer ${RESEND_API_KEY}`,
+  "Content-Type": "application/json",
+});
+
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as {
     email?: unknown;
@@ -85,12 +91,32 @@ export async function POST(request: Request) {
       ? body.source
       : "/";
 
+  // 1. Add contact to audience (if audience ID is configured)
+  if (RESEND_AUDIENCE_ID) {
+    const contactResponse = await fetch(
+      `https://api.resend.com/audiences/${RESEND_AUDIENCE_ID}/contacts`,
+      {
+        method: "POST",
+        headers: resendHeaders(),
+        body: JSON.stringify({ email }),
+        cache: "no-store",
+        signal: AbortSignal.timeout(10_000),
+      },
+    ).catch(() => null);
+
+    if (!contactResponse?.ok && contactResponse?.status !== 422) {
+      // 422 = already exists, which is fine
+      console.error("Resend contact creation failed", {
+        status: contactResponse?.status ?? "network_error",
+        body: await contactResponse?.text().catch(() => ""),
+      });
+    }
+  }
+
+  // 2. Send welcome email
   const sendResponse = await fetch("https://api.resend.com/emails", {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${RESEND_API_KEY}`,
-      "Content-Type": "application/json",
-    },
+    headers: resendHeaders(),
     body: JSON.stringify({
       from: RESEND_FROM,
       to: email,
@@ -113,13 +139,11 @@ export async function POST(request: Request) {
     );
   }
 
+  // 3. Notify site owner
   if (NOTIFY_TO) {
     await fetch("https://api.resend.com/emails", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
+      headers: resendHeaders(),
       body: JSON.stringify({
         from: RESEND_FROM,
         to: NOTIFY_TO,
