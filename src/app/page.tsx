@@ -40,39 +40,31 @@ export default function Home() {
 
   return (
     <>
-      <section style={{ padding: "46px 0 34px" }}>
-        <div className="container">
+      <section className="home-hero-section">
+        <div className="container home-hero">
           <div className="home-intro">
             <div className="eyebrow">For parents of adult children</div>
             <h1 className="serif">Practical Advice for Parents of Adult Children</h1>
             <p>Research-informed guidance for better communication, healthier boundaries, financial support, independence, family conflict, and relationship repair.</p>
             <div className="home-actions"><Link href="/library">Browse Advice <ArrowRight size={18} /></Link><Link href="#common-challenges">Explore Common Challenges</Link></div>
           </div>
-          <div className="lead-grid">
-            <div className="lead-image">
+          <article className="featured-story">
+            <div className="featured-image">
               <Image
                 src={lead.image}
                 alt={lead.imageAlt}
                 fill
                 priority
-                sizes="(max-width: 800px) 100vw, 58vw"
+                sizes="(max-width: 900px) 100vw, 44vw"
                 style={{ objectFit: "cover" }}
               />
             </div>
-            <div className="lead-copy">
+            <div className="featured-copy">
               <div className="eyebrow">{lead.category}</div>
-              <h2
-                className="serif lead-title"
-                style={{
-                  fontSize: "clamp(2.5rem, 3.7vw, 3.65rem)",
-                  lineHeight: 1.02,
-                  margin: "16px 0 18px",
-                  maxWidth: 620,
-                }}
-              >
+              <h2 className="serif featured-title">
                 {lead.title}
               </h2>
-              <p style={{ color: "var(--muted)", fontSize: 17, lineHeight: 1.58, maxWidth: 600, margin: 0 }}>
+              <p>
                 {lead.description}
               </p>
               <Link
@@ -82,7 +74,6 @@ export default function Home() {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: 10,
-                  marginTop: 18,
                   color: "var(--teal-dark)",
                   fontWeight: 800,
                 }}
@@ -90,7 +81,7 @@ export default function Home() {
                 Read the story <ArrowRight size={18} />
               </Link>
             </div>
-          </div>
+          </article>
         </div>
       </section>
 
@@ -210,15 +201,19 @@ export default function Home() {
       </section>
 
       <style>{`
-        .lead-grid { display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr); gap:48px; align-items:start; }
-        .home-intro { max-width:900px; margin-bottom:34px; }
-        .home-intro h1 { font-size:clamp(3rem,6vw,5.5rem); line-height:.98; margin:12px 0 18px; text-wrap:balance; }
-        .home-intro > p { color:var(--muted); font-size:19px; line-height:1.6; max-width:780px; }
+        .home-hero-section { padding:clamp(48px,7vw,92px) 0 clamp(54px,7vw,88px); }
+        .home-hero { display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:clamp(40px,6vw,88px); align-items:center; }
+        .home-intro { max-width:650px; }
+        .home-intro h1 { font-size:clamp(3.5rem,5.7vw,5.75rem); line-height:.94; letter-spacing:-.035em; margin:16px 0 24px; text-wrap:balance; }
+        .home-intro > p { color:var(--muted); font-size:18px; line-height:1.62; max-width:590px; }
         .home-actions { display:flex; flex-wrap:wrap; gap:18px; margin-top:24px; }
         .home-actions a { display:inline-flex; align-items:center; gap:8px; font-weight:800; color:var(--teal-dark); }
-        .lead-image { position:relative; aspect-ratio:4/3; min-width:0; background:#e5e8e4; }
-        .lead-copy { min-width:0; padding-top:2px; }
-        .lead-title { text-wrap:balance; letter-spacing:0; }
+        .featured-story { min-width:0; border-bottom:1px solid var(--line); }
+        .featured-image { position:relative; aspect-ratio:16/10; min-width:0; background:#e5e8e4; overflow:hidden; }
+        .featured-copy { position:relative; width:calc(100% - 32px); margin:-42px 0 0 32px; padding:28px 0 28px 30px; background:var(--paper); }
+        .featured-title { font-size:clamp(2.15rem,3vw,3.15rem); line-height:1.02; margin:12px 0 14px; max-width:560px; text-wrap:balance; }
+        .featured-copy > p { color:var(--muted); font-size:16px; line-height:1.58; max-width:560px; margin:0; }
+        .featured-copy > a { margin-top:18px; }
         .starter-grid { display:grid; grid-template-columns:1.15fr repeat(3, 1fr); gap:26px; align-items:center; }
         .starter-item { display:grid; grid-template-columns:auto 1fr; gap:12px; border-left:1px solid var(--line); padding-left:22px; }
         .starter-item p { color:var(--muted); font-size:13px; line-height:1.45; margin:6px 0 0; }
@@ -232,7 +227,7 @@ export default function Home() {
         .pillar-heading { display:flex; align-items:end; justify-content:space-between; gap:40px; margin:8px 0 28px; }
         .pillar-heading h2 { font-size:40px; line-height:1.08; max-width:650px; margin:0; text-wrap:balance; }
         .pillar-heading > p { color:var(--muted); max-width:360px; line-height:1.55; margin:0; }
-        .pillar-grid { display:grid; grid-template-columns:repeat(5,1fr); border-top:1px solid var(--line); border-left:1px solid var(--line); }
+        .pillar-grid { display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--line); border-left:1px solid var(--line); }
         .pillar-item { min-height:210px; padding:22px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
         .pillar-item > span { color:var(--coral); font-size:12px; font-weight:800; }
         .pillar-item strong { display:block; font-size:21px; margin:30px 0 9px; }
@@ -243,9 +238,9 @@ export default function Home() {
         .resource-strip a { display:flex; align-items:center; gap:8px; color:var(--teal-dark); font-weight:800; }
         .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
         @media (max-width: 900px) {
-          .lead-grid { grid-template-columns:1fr; gap:22px; }
-          .lead-image { aspect-ratio:16/10; }
-          .lead-copy { padding-top:0; }
+          .home-hero { grid-template-columns:1fr; gap:48px; }
+          .home-intro { max-width:760px; }
+          .featured-story { max-width:760px; }
           .starter-grid { grid-template-columns:1fr 1fr; }
           .starter-item { border-left:0; padding:18px 0; border-top:1px solid var(--line); }
           .article-grid { grid-template-columns:1fr 1fr; }
@@ -255,7 +250,12 @@ export default function Home() {
           .newsletter { grid-template-columns:1fr; }
         }
         @media (max-width: 620px) {
-          .lead-image { aspect-ratio:4/3; }
+          .home-hero-section { padding-top:38px; }
+          .home-intro { min-width:0; }
+          .home-intro h1 { font-size:clamp(2.85rem,12.5vw,3.25rem); line-height:.96; overflow-wrap:anywhere; }
+          .home-actions { flex-direction:column; align-items:flex-start; gap:13px; }
+          .featured-image { aspect-ratio:4/3; }
+          .featured-copy { width:calc(100% - 18px); margin:-24px 0 0 18px; padding:22px 0 24px 20px; }
           .starter-grid, .article-grid { grid-template-columns:1fr; }
           .library-callout { padding:28px 22px; }
           .library-number { font-size:64px; }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, Search, X } from "lucide-react";
 import { useState } from "react";
 
@@ -15,6 +16,11 @@ const links = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const isActive = (href: string) =>
+    pathname === href ||
+    pathname.startsWith(`${href}/`) ||
+    (href === "/library" && pathname.startsWith("/articles/"));
 
   return (
     <header
@@ -50,10 +56,10 @@ export function SiteHeader() {
         >
           {links.map(([label, href]) => (
             <Link
-              className="focus-ring"
+              className={`focus-ring nav-link ${isActive(href) ? "nav-active" : ""}`}
               key={href}
               href={href}
-              style={{ fontSize: 14, fontWeight: 700 }}
+              aria-current={isActive(href) ? "page" : undefined}
             >
               {label}
             </Link>
@@ -92,6 +98,8 @@ export function SiteHeader() {
             <Link
               key={href}
               href={href}
+              aria-current={isActive(href) ? "page" : undefined}
+              className={`mobile-nav-link ${isActive(href) ? "nav-active" : ""}`}
               onClick={() => setOpen(false)}
               style={{ display: "block", padding: "11px 0", fontWeight: 700 }}
             >
@@ -102,6 +110,11 @@ export function SiteHeader() {
       )}
       <style>{`
         .mobile-menu { display: none !important; }
+        .nav-link { position:relative; padding:26px 0 24px; font-size:14px; font-weight:700; }
+        .nav-link::after { content:""; position:absolute; left:0; right:0; bottom:16px; height:2px; background:var(--teal); transform:scaleX(0); transform-origin:left; transition:transform .18s ease; }
+        .nav-link:hover::after, .nav-link.nav-active::after { transform:scaleX(1); }
+        .nav-active { color:var(--teal-dark); }
+        .mobile-nav-link.nav-active { border-left:3px solid var(--teal); padding-left:12px !important; }
         @media (max-width: 820px) {
           .desktop-nav { display: none !important; }
           .mobile-menu { display: inline-flex !important; }

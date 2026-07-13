@@ -47,6 +47,10 @@ test("uses a stable homepage SEO heading and canonical topic links", () => {
   assert.match(source, /Practical Advice for Parents of Adult Children/);
   assert.match(source, /absolute:\s*["']Advice for Parents of Adult Children \| Still Talking["']/);
   assert.doesNotMatch(source, /\/library\?topic=/);
+  assert.match(source, /className="[^"]*\bhome-hero\b[^"]*"/);
+  assert.match(source, /className="featured-story"/);
+  assert.match(source, /grid-template-columns:minmax\(0,1\.05fr\) minmax\(0,\.95fr\)/);
+  assert.match(source, /\.pillar-grid \{[^}]*grid-template-columns:repeat\(3,1fr\)/s);
 });
 
 test("publishes six indexable pillar pages with visible FAQs", () => {
@@ -56,7 +60,23 @@ test("publishes six indexable pillar pages with visible FAQs", () => {
   assert.match(source, /Frequently asked questions/);
   assert.match(source, /Quick answer/);
   assert.match(source, /articleGroups/);
+  assert.match(source, /className="topic-layout"/);
+  assert.match(source, /position:sticky/);
+  assert.match(source, /\.topic-articles\{[^}]*grid-template-columns:repeat\(2,1fr\)/s);
   assert.match(source, /BreadcrumbList/);
+});
+
+test("gives every topic a unique visual and quick-answer treatment", () => {
+  const source = read("src/lib/articles.ts");
+  assert.equal((source.match(/quickAnswer:/g) ?? []).length, 6);
+  assert.equal((source.match(/accent:/g) ?? []).length, 6);
+});
+
+test("marks the active primary navigation destination", () => {
+  const source = read("src/components/site-header.tsx");
+  assert.match(source, /usePathname/);
+  assert.match(source, /aria-current/);
+  assert.match(source, /nav-active/);
 });
 
 test("uses SEO titles and topic breadcrumbs on articles", () => {
