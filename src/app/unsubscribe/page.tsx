@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function UnsubscribePage() {
@@ -9,24 +10,20 @@ export default function UnsubscribePage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const email = params.get("email");
-    if (!email) {
-      setStatus("error");
-      setMessage("No email address provided.");
-      return;
-    }
-    fetch("/api/unsubscribe", {
+    const request = email ? fetch("/api/unsubscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
-    })
+    }) : Promise.reject(new Error("missing-email"));
+    request
       .then((r) => r.json())
       .then((data) => {
         setStatus("done");
         setMessage(data.message ?? "Unsubscribed.");
       })
-      .catch(() => {
+      .catch((error: Error) => {
         setStatus("error");
-        setMessage("Something went wrong. Please try again later.");
+        setMessage(error.message === "missing-email" ? "No email address provided." : "Something went wrong. Please try again later.");
       });
   }, []);
 
@@ -50,12 +47,12 @@ export default function UnsubscribePage() {
               className="serif"
               style={{ fontSize: 32, marginBottom: 12, color: "var(--ink)" }}
             >
-              You're unsubscribed.
+              You&apos;re unsubscribed.
             </h1>
             <p style={{ fontSize: 16, lineHeight: 1.6, color: "var(--muted)" }}>
               {message}
             </p>
-            <a
+            <Link
               href="/"
               style={{
                 display: "inline-block",
@@ -66,7 +63,7 @@ export default function UnsubscribePage() {
               }}
             >
               Return home
-            </a>
+            </Link>
           </>
         )}
         {status === "error" && (
