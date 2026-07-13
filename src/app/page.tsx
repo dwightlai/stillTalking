@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookOpen, MessageCircle, ShieldCheck, WalletCards } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
 import { NewsletterForm } from "@/components/newsletter-form";
-import { getAllArticles, pillarDescriptions } from "@/lib/articles";
+import { getAllArticles, topics } from "@/lib/articles";
+
+export const metadata: Metadata = {
+  title: { absolute: "Advice for Parents of Adult Children | Still Talking" },
+  description: "Practical, research-informed advice for parents of adult children. Learn how to handle communication, boundaries, money, independence, family conflict and relationship repair.",
+  alternates: { canonical: "/" },
+};
 
 const starters = [
   {
@@ -16,13 +23,13 @@ const starters = [
     icon: WalletCards,
     title: "Money and independence",
     text: "Help that supports growth instead of creating control.",
-    href: "/topics/money-work",
+    href: "/topics/money-and-support",
   },
   {
     icon: MessageCircle,
     title: "Hard conversations",
     text: "Words that keep the door open when you disagree.",
-    href: "/topics/guides",
+    href: "/topics/conflict-and-repair",
   },
 ];
 
@@ -35,8 +42,11 @@ export default function Home() {
     <>
       <section style={{ padding: "46px 0 34px" }}>
         <div className="container">
-          <div className="eyebrow" style={{ marginBottom: 18 }}>
-            For parents of adult children
+          <div className="home-intro">
+            <div className="eyebrow">For parents of adult children</div>
+            <h1 className="serif">Practical Advice for Parents of Adult Children</h1>
+            <p>Research-informed guidance for better communication, healthier boundaries, financial support, independence, family conflict, and relationship repair.</p>
+            <div className="home-actions"><Link href="/library">Browse Advice <ArrowRight size={18} /></Link><Link href="#common-challenges">Explore Common Challenges</Link></div>
           </div>
           <div className="lead-grid">
             <div className="lead-image">
@@ -51,7 +61,7 @@ export default function Home() {
             </div>
             <div className="lead-copy">
               <div className="eyebrow">{lead.category}</div>
-              <h1
+              <h2
                 className="serif lead-title"
                 style={{
                   fontSize: "clamp(2.5rem, 3.7vw, 3.65rem)",
@@ -61,7 +71,7 @@ export default function Home() {
                 }}
               >
                 {lead.title}
-              </h1>
+              </h2>
               <p style={{ color: "var(--muted)", fontSize: 17, lineHeight: 1.58, maxWidth: 600, margin: 0 }}>
                 {lead.description}
               </p>
@@ -126,26 +136,26 @@ export default function Home() {
         </div>
       </section>
 
-      <section style={{ padding: "60px 0 20px" }}>
+      <section id="common-challenges" style={{ padding: "60px 0 20px", scrollMarginTop: 90 }}>
         <div className="container">
           <div className="eyebrow">Explore by family pattern</div>
           <div className="pillar-heading">
             <h2 className="serif">The issues change. The need for trust does not.</h2>
             <p>
-              Ten editorial pillars organize the questions American parents
-              most often face as children become adults.
+              Six focused topics organize the questions parents most often
+              face as children become adults.
             </p>
           </div>
           <div className="pillar-grid">
-            {Object.entries(pillarDescriptions).map(([name, description], index) => (
+            {topics.map((topic, index) => (
               <Link
-                key={name}
-                href={`/library?topic=${encodeURIComponent(name)}`}
+                key={topic.slug}
+                href={`/topics/${topic.slug}`}
                 className="pillar-item focus-ring"
               >
                 <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong className="serif">{name}</strong>
-                <p>{description}</p>
+                <strong className="serif">{topic.name}</strong>
+                <p>{topic.shortDescription}</p>
               </Link>
             ))}
           </div>
@@ -161,7 +171,7 @@ export default function Home() {
                 A better way to stay close
               </h2>
             </div>
-            <Link href="/topics/relationships" style={{ fontWeight: 800, color: "var(--teal-dark)" }}>
+            <Link href="/library" style={{ fontWeight: 800, color: "var(--teal-dark)" }}>
               View all stories
             </Link>
           </div>
@@ -201,6 +211,11 @@ export default function Home() {
 
       <style>{`
         .lead-grid { display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr); gap:48px; align-items:start; }
+        .home-intro { max-width:900px; margin-bottom:34px; }
+        .home-intro h1 { font-size:clamp(3rem,6vw,5.5rem); line-height:.98; margin:12px 0 18px; text-wrap:balance; }
+        .home-intro > p { color:var(--muted); font-size:19px; line-height:1.6; max-width:780px; }
+        .home-actions { display:flex; flex-wrap:wrap; gap:18px; margin-top:24px; }
+        .home-actions a { display:inline-flex; align-items:center; gap:8px; font-weight:800; color:var(--teal-dark); }
         .lead-image { position:relative; aspect-ratio:4/3; min-width:0; background:#e5e8e4; }
         .lead-copy { min-width:0; padding-top:2px; }
         .lead-title { text-wrap:balance; letter-spacing:0; }

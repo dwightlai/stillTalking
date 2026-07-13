@@ -8,18 +8,21 @@ const resources = [
     label: "Free guide",
     title: "The One-Reminder Agreement",
     text: "A simple family agreement that turns repeated reminders into one clear, respectful conversation.",
+    href: "/resources/conversation-scripts-for-parents",
   },
   {
     icon: BookOpen,
     label: "Workbook preview",
     title: "30 Days of Better Boundaries",
     text: "Daily reflection prompts for parents who want to stay close without managing every decision.",
+    href: "#early-list",
   },
   {
     icon: Mail,
     label: "Weekly letter",
     title: "The Sunday Still Talking Note",
     text: "One family pattern, one useful phrase, and one small practice delivered each week.",
+    href: "#early-list",
   },
 ];
 
@@ -38,13 +41,13 @@ export default function ResourcesPage() {
           </p>
         </div>
         <div className="resource-grid">
-          {resources.map(({ icon: Icon, label, title, text }) => (
+          {resources.map(({ icon: Icon, label, title, text, href }) => (
             <article key={title}>
               <Icon size={26} color="var(--coral)" />
               <div className="eyebrow" style={{ marginTop: 24 }}>{label}</div>
               <h2 className="serif">{title}</h2>
               <p>{text}</p>
-              <a href="#early-list">Join the early list <ArrowRight size={16} /></a>
+              <Link href={href}>{href.startsWith("/resources/") ? "Read the free guide" : "Join the early list"} <ArrowRight size={16} /></Link>
             </article>
           ))}
         </div>

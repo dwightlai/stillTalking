@@ -26,8 +26,8 @@ export function SiteFooter() {
             <Link href="/library" style={{ display: "block", marginTop: 16, color: "#bbc5cc" }}>
               Article library
             </Link>
-            <Link href="/topics/relationships" style={{ display: "block", marginTop: 16, color: "#bbc5cc" }}>
-              Relationships
+            <Link href="/topics/communication" style={{ display: "block", marginTop: 16, color: "#bbc5cc" }}>
+              Communication
             </Link>
             <Link href="/topics/boundaries" style={{ display: "block", marginTop: 12, color: "#bbc5cc" }}>
               Boundaries
@@ -46,6 +46,15 @@ export function SiteFooter() {
             </Link>
             <Link href="/privacy" style={{ display: "block", marginTop: 12, color: "#bbc5cc" }}>
               Privacy
+            </Link>
+            <Link href="/editorial-policy" style={{ display: "block", marginTop: 12, color: "#bbc5cc" }}>
+              Editorial policy
+            </Link>
+            <Link href="/fact-checking-and-corrections" style={{ display: "block", marginTop: 12, color: "#bbc5cc" }}>
+              Fact checking &amp; corrections
+            </Link>
+            <Link href="/ai-use-policy" style={{ display: "block", marginTop: 12, color: "#bbc5cc" }}>
+              AI use policy
             </Link>
           </div>
         </div>

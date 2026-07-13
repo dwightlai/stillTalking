@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { BookLink } from "@/components/book-link";
 import { ShareCard } from "@/components/share-card";
-import { getAllArticles, getArticle } from "@/lib/articles";
+import { getAllArticles, getArticle, getRelatedArticles, getTopic } from "@/lib/articles";
 
 export function generateStaticParams() {
   return getAllArticles().map(({ slug }) => ({ slug }));
@@ -22,12 +22,12 @@ export async function generateMetadata({
   const article = getArticle(slug);
   return article
     ? {
-        title: article.meta.title,
+        title: article.meta.seoTitle,
         description: article.meta.description,
         alternates: { canonical: `/articles/${slug}` },
         openGraph: {
           type: "article",
-          title: article.meta.title,
+          title: article.meta.seoTitle,
           description: article.meta.description,
           publishedTime: article.meta.publishedAt,
           modifiedTime: article.meta.updatedAt,
@@ -35,7 +35,7 @@ export async function generateMetadata({
         },
         twitter: {
           card: "summary_large_image",
-          title: article.meta.title,
+          title: article.meta.seoTitle,
           description: article.meta.description,
           images: [article.meta.image],
         },
@@ -52,6 +52,9 @@ export default async function ArticlePage({
   const article = getArticle(slug);
   if (!article) notFound();
   const { meta, content } = article;
+  const topic = getTopic(meta.topic);
+  if (!topic) notFound();
+  const related = getRelatedArticles(meta);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://stilltalkingfamily.com";
   const articleUrl = `${siteUrl}/articles/${slug}`;
   const jsonLd = {
@@ -71,7 +74,7 @@ export default async function ArticlePage({
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
-      { "@type": "ListItem", position: 2, name: "Library", item: `${siteUrl}/library` },
+      { "@type": "ListItem", position: 2, name: topic.name, item: `${siteUrl}/topics/${meta.topic}` },
       { "@type": "ListItem", position: 3, name: meta.title, item: articleUrl },
     ],
   };
@@ -90,8 +93,8 @@ export default async function ArticlePage({
         <div className="container" style={{ maxWidth: 980 }}>
           <nav aria-label="Breadcrumb" className="article-breadcrumb">
             <Link href="/">Home</Link><span aria-hidden="true">/</span>
-            <Link href="/library">Library</Link><span aria-hidden="true">/</span>
-            <span aria-current="page">{meta.category}</span>
+            <Link href={`/topics/${meta.topic}`}>{topic.name}</Link><span aria-hidden="true">/</span>
+            <span aria-current="page">{meta.title}</span>
           </nav>
           <div className="eyebrow">{meta.category}</div>
           <h1
@@ -161,6 +164,11 @@ export default async function ArticlePage({
             ))}
           </ul>
         </section>
+        <section className="related-advice" aria-labelledby="related-advice-title">
+          <div className="eyebrow">Keep reading</div>
+          <h2 id="related-advice-title" className="serif">Related advice</h2>
+          <ul>{related.map((item) => <li key={item.slug}><Link href={`/articles/${item.slug}`}>{item.title}</Link><span>{item.description}</span></li>)}</ul>
+        </section>
         <ShareCard title={meta.title} quote={meta.cardQuote} url={articleUrl} />
       </div>
       <style>{`
@@ -175,6 +183,12 @@ export default async function ArticlePage({
         .article-sources li { border-top:1px solid var(--line); padding:14px 0; display:grid; gap:4px; }
         .article-sources a { color:var(--teal-dark); font-weight:700; text-decoration:underline; text-underline-offset:3px; }
         .article-sources span { color:var(--muted); font-size:12px; }
+        .related-advice { border-top:1px solid var(--line); margin-top:38px; padding-top:28px; }
+        .related-advice h2 { font-size:30px; margin:7px 0 16px; }
+        .related-advice ul { list-style:none; margin:0; padding:0; }
+        .related-advice li { border-top:1px solid var(--line); padding:15px 0; display:grid; gap:5px; }
+        .related-advice a { color:var(--teal-dark); font-weight:800; }
+        .related-advice span { color:var(--muted); font-size:13px; line-height:1.5; }
       `}</style>
     </article>
   );

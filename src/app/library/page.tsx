@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
 import { LibraryExplorer } from "@/components/library-explorer";
-import { getAllArticles, pillarDescriptions } from "@/lib/articles";
+import { getAllArticles, topics } from "@/lib/articles";
 
-export const metadata: Metadata = {
-  title: "Article Library",
-  description:
-    "Browse practical guides for parents of adult children, ordered newest first.",
-};
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}): Promise<Metadata> {
+  const params = await searchParams;
+  const isFiltered = Object.keys(params).length > 0;
+  return {
+    title: "Advice Library for Parents of Adult Children",
+    description: "Browse practical guidance about communication, boundaries, money, independence, family relationships, conflict, and repair.",
+    alternates: { canonical: "/library" },
+    ...(isFiltered ? { robots: { index: false, follow: true } } : {}),
+  };
+}
 
 export default async function LibraryPage({
   searchParams,
@@ -14,7 +23,7 @@ export default async function LibraryPage({
   searchParams: Promise<{ topic?: string; focus?: string }>;
 }) {
   const articles = getAllArticles();
-  const pillars = Object.keys(pillarDescriptions);
+  const topicOptions = topics.map((topic) => ({ slug: topic.slug, name: topic.name }));
   const { topic, focus } = await searchParams;
 
   return (
@@ -34,8 +43,8 @@ export default async function LibraryPage({
         </div>
         <LibraryExplorer
           articles={articles}
-          pillars={pillars}
-          initialPillar={topic}
+          topics={topicOptions}
+          initialTopic={topic}
           focusSearch={focus === "search"}
         />
       </div>

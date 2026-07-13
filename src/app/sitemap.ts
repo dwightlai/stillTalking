@@ -1,11 +1,10 @@
 import type { MetadataRoute } from "next";
-import { getAllArticles } from "@/lib/articles";
+import { getAllArticles, topics } from "@/lib/articles";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://stilltalkingfamily.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPages = ["", "/about", "/library", "/resources", "/disclosure", "/privacy"];
-  const topics = ["relationships", "boundaries", "money-work", "guides"];
+  const staticPages = ["", "/about", "/library", "/resources", "/resources/conversation-scripts-for-parents", "/editorial-policy", "/fact-checking-and-corrections", "/ai-use-policy", "/disclosure", "/privacy"];
 
   return [
     ...staticPages.map((path) => ({
@@ -15,7 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: path === "" ? 1 : 0.7,
     })),
     ...topics.map((topic) => ({
-      url: `${siteUrl}/topics/${topic}`,
+      url: `${siteUrl}/topics/${topic.slug}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.8,

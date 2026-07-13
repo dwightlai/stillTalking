@@ -21,33 +21,33 @@ function formatPublishedDate(value: string) {
 
 export function LibraryExplorer({
   articles,
-  pillars,
-  initialPillar = "All topics",
+  topics,
+  initialTopic = "all",
   focusSearch = false,
 }: {
   articles: ArticleMeta[];
-  pillars: string[];
-  initialPillar?: string;
+  topics: Array<{ slug: string; name: string }>;
+  initialTopic?: string;
   focusSearch?: boolean;
 }) {
   const [query, setQuery] = useState("");
-  const [pillar, setPillar] = useState(
-    pillars.includes(initialPillar) ? initialPillar : "All topics",
+  const [topic, setTopic] = useState(
+    topics.some((item) => item.slug === initialTopic) ? initialTopic : "all",
   );
   const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => {
     const normalized = query.trim().toLowerCase();
     return articles.filter((article) => {
-      const matchesPillar = pillar === "All topics" || article.pillar === pillar;
+      const matchesTopic = topic === "all" || article.topic === topic;
       const matchesQuery =
         !normalized ||
-        `${article.title} ${article.description} ${article.pillar ?? ""}`
+        `${article.title} ${article.description} ${article.primaryKeyword}`
           .toLowerCase()
           .includes(normalized);
-      return matchesPillar && matchesQuery;
+      return matchesTopic && matchesQuery;
     });
-  }, [articles, pillar, query]);
+  }, [articles, topic, query]);
 
   const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, pages);
@@ -58,8 +58,8 @@ export function LibraryExplorer({
     setPage(1);
   }
 
-  function updatePillar(value: string) {
-    setPillar(value);
+  function updateTopic(value: string) {
+    setTopic(value);
     setPage(1);
   }
 
@@ -86,10 +86,10 @@ export function LibraryExplorer({
         <label className="topic-select">
           <SlidersHorizontal size={18} aria-hidden="true" />
           <span className="sr-only">Filter by topic</span>
-          <select value={pillar} onChange={(event) => updatePillar(event.target.value)}>
-            <option>All topics</option>
-            {pillars.map((item) => (
-              <option key={item}>{item}</option>
+          <select value={topic} onChange={(event) => updateTopic(event.target.value)}>
+            <option value="all">All topics</option>
+            {topics.map((item) => (
+              <option key={item.slug} value={item.slug}>{item.name}</option>
             ))}
           </select>
         </label>
@@ -99,7 +99,7 @@ export function LibraryExplorer({
         <span>
           <strong>{filtered.length}</strong>{" "}
           {filtered.length === 1 ? "practical article" : "practical articles"}
-          {pillar !== "All topics" ? ` in ${pillar}` : ""}
+          {topic !== "all" ? ` in ${topics.find((item) => item.slug === topic)?.name}` : ""}
         </span>
         <span>Newest first</span>
       </div>
@@ -111,7 +111,7 @@ export function LibraryExplorer({
               <Image src={article.image} alt="" fill sizes="180px" style={{ objectFit: "cover" }} />
             </Link>
             <div>
-              <div className="eyebrow">{article.pillar ?? article.category}</div>
+              <div className="eyebrow">{topics.find((item) => item.slug === article.topic)?.name ?? article.category}</div>
               <h2 className="serif">
                 <Link href={`/articles/${article.slug}`} className="focus-ring">
                   {article.title}

@@ -9,11 +9,11 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://stilltalkingfamily.com",
   ),
   title: {
-    default: "Still Talking",
+    default: "Advice for Parents of Adult Children | Still Talking",
     template: "%s | Still Talking",
   },
   description:
-    "Practical guidance for parents who want to understand their adult children and stay close without overstepping.",
+    "Practical, research-informed guidance for parents of adult children about communication, boundaries, support, independence, conflict, and repair.",
   openGraph: {
     type: "website",
     siteName: "Still Talking",

@@ -6,9 +6,10 @@ import { useState } from "react";
 
 const links = [
   ["Library", "/library"],
-  ["Relationships", "/topics/relationships"],
+  ["Communication", "/topics/communication"],
   ["Boundaries", "/topics/boundaries"],
-  ["Money & Work", "/topics/money-work"],
+  ["Money & Support", "/topics/money-and-support"],
+  ["Conflict & Repair", "/topics/conflict-and-repair"],
   ["Resources", "/resources"],
 ];
 
