@@ -46,7 +46,7 @@ export default function Home() {
             <div className="eyebrow">For parents of adult children</div>
             <h1 className="serif">Practical Advice for Parents of Adult Children</h1>
             <p>Research-informed guidance for better communication, healthier boundaries, financial support, independence, family conflict, and relationship repair.</p>
-            <div className="home-actions"><Link href="/library">Browse Advice <ArrowRight size={18} /></Link><Link href="#common-challenges">Explore Common Challenges</Link></div>
+            <div className="home-actions"><Link href="/library" className="home-primary-action">Browse Advice <ArrowRight size={18} /></Link><Link href="#common-challenges" className="home-secondary-action">Explore Common Challenges</Link></div>
           </div>
           <article className="featured-story">
             <div className="featured-image">
@@ -201,16 +201,20 @@ export default function Home() {
       </section>
 
       <style>{`
-        .home-hero-section { padding:clamp(48px,7vw,92px) 0 clamp(54px,7vw,88px); }
+        .home-hero-section { padding:clamp(40px,5vw,68px) 0 clamp(44px,5.5vw,72px); }
         .home-hero { display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:clamp(40px,6vw,88px); align-items:center; }
         .home-intro { max-width:650px; }
-        .home-intro h1 { font-size:clamp(3.5rem,5.7vw,5.75rem); line-height:.94; letter-spacing:-.035em; margin:16px 0 24px; text-wrap:balance; }
+        .home-intro h1 { font-size:clamp(3.4rem,5.15vw,5.25rem); line-height:.94; letter-spacing:-.035em; margin:16px 0 22px; text-wrap:balance; }
         .home-intro > p { color:var(--muted); font-size:18px; line-height:1.62; max-width:590px; }
         .home-actions { display:flex; flex-wrap:wrap; gap:18px; margin-top:24px; }
-        .home-actions a { display:inline-flex; align-items:center; gap:8px; font-weight:800; color:var(--teal-dark); }
+        .home-actions a { display:inline-flex; align-items:center; gap:8px; font-weight:800; transition:color .18s ease, transform .18s ease, border-color .18s ease; }
+        .home-primary-action { color:var(--teal-dark); border-bottom:2px solid var(--teal); padding-bottom:3px; }
+        .home-primary-action:hover { transform:translateY(-2px); }
+        .home-secondary-action { color:var(--muted); }
+        .home-secondary-action:hover { color:var(--teal-dark); }
         .featured-story { min-width:0; border-bottom:1px solid var(--line); }
         .featured-image { position:relative; aspect-ratio:16/10; min-width:0; background:#e5e8e4; overflow:hidden; }
-        .featured-copy { position:relative; width:calc(100% - 32px); margin:-42px 0 0 32px; padding:28px 0 28px 30px; background:var(--paper); }
+        .featured-copy { position:relative; width:calc(100% - 20px); margin:-34px 0 0 20px; padding:25px 0 24px 20px; background:var(--paper); }
         .featured-title { font-size:clamp(2.15rem,3vw,3.15rem); line-height:1.02; margin:12px 0 14px; max-width:560px; text-wrap:balance; }
         .featured-copy > p { color:var(--muted); font-size:16px; line-height:1.58; max-width:560px; margin:0; }
         .featured-copy > a { margin-top:18px; }

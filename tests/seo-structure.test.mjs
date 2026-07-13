@@ -51,6 +51,11 @@ test("uses a stable homepage SEO heading and canonical topic links", () => {
   assert.match(source, /className="featured-story"/);
   assert.match(source, /grid-template-columns:minmax\(0,1\.05fr\) minmax\(0,\.95fr\)/);
   assert.match(source, /\.pillar-grid \{[^}]*grid-template-columns:repeat\(3,1fr\)/s);
+  assert.match(source, /className="home-primary-action"/);
+  assert.match(source, /className="home-secondary-action"/);
+  assert.match(source, /padding:clamp\(40px,5vw,68px\) 0 clamp\(44px,5\.5vw,72px\)/);
+  assert.match(source, /font-size:clamp\(3\.4rem,5\.15vw,5\.25rem\)/);
+  assert.match(source, /margin:-34px 0 0 20px; padding:25px 0 24px 20px/);
 });
 
 test("publishes six indexable pillar pages with visible FAQs", () => {
