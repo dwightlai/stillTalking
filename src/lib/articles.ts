@@ -14,8 +14,10 @@ export type ArticleMeta = {
   imageAlt: string;
   featured?: boolean;
   cardQuote: string;
-  pillar?: string;
-  intent?: string;
+  seoTitle: string;
+  primaryKeyword: string;
+  searchIntent: string;
+  topic: TopicSlug;
   updatedAt: string;
   contentType: "guide" | "q-and-a" | "narrative" | "research";
   exampleType: "composite" | "reported" | "none";
@@ -57,26 +59,58 @@ export function getArticle(slug: string) {
   return { meta: { slug, ...data } as ArticleMeta, content };
 }
 
-export const topicDescriptions: Record<string, string> = {
-  relationships:
-    "Understand the pressures shaping adult children, partners, and extended family relationships.",
-  boundaries:
-    "Stay connected without turning care into surveillance, pressure, or control.",
-  "money-work":
-    "Navigate financial support, career choices, housing, and independence with clarity.",
-  guides:
-    "Practical scripts and frameworks for the conversations families tend to avoid.",
-};
+export const topics = [
+  {
+    slug: "communication",
+    name: "Communication",
+    title: "Better Communication With Adult Children",
+    shortDescription: "Listen, ask, disagree, and stay in contact without turning every conversation into a test.",
+  },
+  {
+    slug: "boundaries",
+    name: "Boundaries",
+    title: "Healthy Boundaries With Adult Children",
+    shortDescription: "Keep care and closeness while respecting privacy, choices, time, and limits.",
+  },
+  {
+    slug: "money-and-support",
+    name: "Money and Support",
+    title: "Financial Support for Adult Children",
+    shortDescription: "Offer help with clear terms, realistic limits, and dignity on both sides.",
+  },
+  {
+    slug: "independence",
+    name: "Independence",
+    title: "Supporting an Adult Child's Independence",
+    shortDescription: "Navigate moving, work, housing, and practical help without taking over.",
+  },
+  {
+    slug: "family-relationships",
+    name: "Family Relationships",
+    title: "Family Relationships as Children Become Adults",
+    shortDescription: "Adjust to partners, grandchildren, holidays, and changing family roles.",
+  },
+  {
+    slug: "conflict-and-repair",
+    name: "Conflict and Repair",
+    title: "Repairing Conflict With an Adult Child",
+    shortDescription: "Own harm, lower pressure, and create conditions in which trust can regrow.",
+  },
+] as const;
 
-export const pillarDescriptions: Record<string, string> = {
-  Boundaries: "Privacy, access, advice, and the difference between closeness and control.",
-  "Money and Support": "Financial help with clear terms and dignity on both sides.",
-  "Career and Education": "Work and education choices in a labor market parents did not enter.",
-  "Love and Partnership": "Marriage, partners, children, and changing definitions of family.",
-  Communication: "Scripts for listening, apologizing, and disagreeing without escalation.",
-  "Independent Living": "Housing, routines, distance, pets, and adult life on different terms.",
-  "Family Repair": "Rebuilding trust after criticism, conflict, silence, or estrangement.",
-  "Parent Transitions": "A meaningful parent identity that does not require managing adult children.",
-  "Digital Life": "Privacy and connection across phones, group chats, and social media.",
-  "Family Expectations": "Tradition, siblings, extended family, and the weight of inherited roles.",
-};
+export type TopicSlug = (typeof topics)[number]["slug"];
+
+export function getTopic(slug: string) {
+  return topics.find((topic) => topic.slug === slug);
+}
+
+export function getArticlesByTopic(topic: TopicSlug) {
+  return getAllArticles().filter((article) => article.topic === topic);
+}
+
+export function getRelatedArticles(article: ArticleMeta) {
+  const others = getAllArticles().filter((candidate) => candidate.slug !== article.slug);
+  const sameTopic = others.filter((candidate) => candidate.topic === article.topic).slice(0, 2);
+  const crossTopic = others.find((candidate) => candidate.topic !== article.topic);
+  return crossTopic ? [...sameTopic, crossTopic] : sameTopic;
+}

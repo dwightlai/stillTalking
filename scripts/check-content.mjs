@@ -23,9 +23,12 @@ const today = new Intl.DateTimeFormat("sv-SE", {
 }).format(new Date());
 const required = [
   "title",
+  "seoTitle",
   "description",
   "category",
-  "pillar",
+  "topic",
+  "primaryKeyword",
+  "searchIntent",
   "status",
   "publishedAt",
   "updatedAt",
@@ -38,6 +41,14 @@ const required = [
   "imageAlt",
   "cardQuote",
 ];
+const topics = new Set([
+  "communication",
+  "boundaries",
+  "money-and-support",
+  "independence",
+  "family-relationships",
+  "conflict-and-repair",
+]);
 
 for (const record of records) {
   for (const field of required) {
@@ -48,6 +59,18 @@ for (const record of records) {
   }
   if (record.data.generated || record.data.reviewStatus) {
     errors.push(`${record.file}: generated/editorial-draft metadata is not allowed`);
+  }
+  if (record.data.pillar) {
+    errors.push(`${record.file}: obsolete pillar field is not allowed`);
+  }
+  if (!topics.has(record.data.topic)) {
+    errors.push(`${record.file}: invalid topic`);
+  }
+  if (
+    typeof record.data.seoTitle === "string" &&
+    (record.data.seoTitle.length < 35 || record.data.seoTitle.length > 65)
+  ) {
+    errors.push(`${record.file}: seoTitle must be 35-65 characters`);
   }
   if (record.words < 600) {
     errors.push(`${record.file}: ${record.words} words; minimum is 600`);
@@ -86,7 +109,7 @@ for (const record of records) {
   }
 }
 
-for (const field of ["title", "description", "cardQuote", "image", "imageAlt"]) {
+for (const field of ["title", "seoTitle", "description", "cardQuote", "image", "imageAlt"]) {
   const seen = new Map();
   for (const record of records) {
     const value = record.data[field];
