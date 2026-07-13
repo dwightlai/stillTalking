@@ -54,6 +54,8 @@ test("publishes six indexable pillar pages with visible FAQs", () => {
   assert.match(source, /generateMetadata/);
   assert.match(source, /FAQPage/);
   assert.match(source, /Frequently asked questions/);
+  assert.match(source, /Quick answer/);
+  assert.match(source, /articleGroups/);
   assert.match(source, /BreadcrumbList/);
 });
 
@@ -70,6 +72,14 @@ test("sitemap contains canonical topics and trust resources only", () => {
   assert.match(source, /conversation-scripts-for-parents/);
   assert.match(source, /topics\.map/);
   assert.doesNotMatch(source, /["']relationships["'],\s*["']boundaries/);
+  assert.doesNotMatch(source, /lastModified:\s*new Date\(\)/);
+});
+
+test("content gate validates real ISO calendar dates", () => {
+  const source = read("scripts/check-content.mjs");
+  assert.match(source, /isValidIsoDate/);
+  assert.match(source, /invalid publishedAt date/);
+  assert.match(source, /invalid updatedAt date/);
 });
 
 test("publishes transparent editorial policy pages", () => {

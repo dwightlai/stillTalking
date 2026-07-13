@@ -51,6 +51,13 @@ const topics = new Set([
   "conflict-and-repair",
 ]);
 
+function isValidIsoDate(value) {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const [year, month, day] = value.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+}
+
 for (const record of records) {
   for (const field of required) {
     if (!record.data[field]) errors.push(`${record.file}: missing ${field}`);
@@ -107,6 +114,12 @@ for (const record of records) {
   const imagePath = path.join(process.cwd(), "public", record.data.image ?? "");
   if (!record.data.image?.startsWith("/images/") || !fs.existsSync(imagePath)) {
     errors.push(`${record.file}: referenced illustration does not exist in public/images`);
+  }
+  if (!isValidIsoDate(record.data.publishedAt)) {
+    errors.push(`${record.file}: invalid publishedAt date`);
+  }
+  if (!isValidIsoDate(record.data.updatedAt)) {
+    errors.push(`${record.file}: invalid updatedAt date`);
   }
   const topicLink = `/topics/${record.data.topic}`;
   if (!record.content.includes(`](${topicLink})`)) {

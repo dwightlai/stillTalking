@@ -85,6 +85,31 @@ const content: Record<TopicSlug, { intro: string; sections: Array<{ title: strin
   },
 };
 
+const articleGroups: Record<TopicSlug, Array<{ title: string; slugs: string[] }>> = {
+  communication: [
+    { title: "Staying in contact", slugs: ["how-often-should-adult-children-call"] },
+    { title: "Advice and everyday trust", slugs: ["let-the-good-news-land", "repeated-reminders", "summer-heat-and-your-aging-parent"] },
+    { title: "Disagreeing without losing the relationship", slugs: ["when-you-disagree-about-politics"] },
+  ],
+  boundaries: [
+    { title: "Privacy and access", slugs: ["privacy-is-not-distance", "holiday-homecoming-without-the-interrogation"] },
+    { title: "Concern and control", slugs: ["concern-becomes-control"] },
+  ],
+  "money-and-support": [
+    { title: "Financial help with clear limits", slugs: ["financial-help-control"] },
+    { title: "Work and career decisions", slugs: ["career-advice-adult-child-can-use"] },
+  ],
+  independence: [{ title: "Moving out and taking ownership", slugs: ["when-adult-child-moves-out"] }],
+  "family-relationships": [
+    { title: "Partners and marriage", slugs: ["couple-first-rule-for-in-laws", "talk-about-marriage-without-pressure"] },
+    { title: "Grandchildren and changing roles", slugs: ["when-you-want-grandchildren-and-your-child-does-not", "when-your-adult-child-becomes-a-parent"] },
+  ],
+  "conflict-and-repair": [
+    { title: "Apology and changed behavior", slugs: ["apology-that-does-not-demand-forgiveness", "when-you-lose-your-temper-with-your-adult-child"] },
+    { title: "Keeping children out of adult conflict", slugs: ["do-not-pull-your-child-into-your-fight"] },
+  ],
+};
+
 export function generateStaticParams() {
   return topics.map(({ slug }) => ({ slug }));
 }
@@ -115,11 +140,12 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
     <div className="container topic-shell">
       <nav aria-label="Breadcrumb" className="topic-breadcrumb"><Link href="/">Home</Link><span>/</span><span aria-current="page">{topic.name}</span></nav>
       <header><div className="eyebrow">Advice topic</div><h1 className="serif">{topic.title}</h1><p>{topicContent.intro}</p></header>
+      <aside className="quick-answer"><strong>Quick answer</strong><p>{topic.shortDescription} Start by making expectations explicit, asking before advising, and leaving adult decisions with the person who must live with them.</p></aside>
       <nav aria-label="On this page" className="topic-jumps"><strong>On this page</strong>{topicContent.sections.map((section, index) => <a key={section.title} href={`#section-${index + 1}`}>{section.title}</a>)}<a href="#frequently-asked-questions">Frequently asked questions</a></nav>
       <div className="topic-copy">{topicContent.sections.map((section, index) => <section id={`section-${index + 1}`} key={section.title}><h2 className="serif">{section.title}</h2><p>{section.body}</p></section>)}</div>
-      <section aria-labelledby="topic-articles"><div className="eyebrow">Related advice</div><h2 id="topic-articles" className="serif">Questions within {topic.name.toLowerCase()}</h2><div className="topic-articles">{articles.map((article) => <ArticleCard key={article.slug} article={article} />)}</div></section>
+      <section aria-labelledby="topic-articles"><div className="eyebrow">Related advice</div><h2 id="topic-articles" className="serif">Questions within {topic.name.toLowerCase()}</h2>{articleGroups[topic.slug].map((group) => { const grouped = group.slugs.map((articleSlug) => articles.find((article) => article.slug === articleSlug)).filter((article): article is NonNullable<typeof article> => Boolean(article)); return grouped.length ? <div className="article-group" key={group.title}><h3 className="serif">{group.title}</h3><div className="topic-articles">{grouped.map((article) => <ArticleCard key={article.slug} article={article} />)}</div></div> : null; })}</section>
       <section id="frequently-asked-questions" className="topic-faq"><div className="eyebrow">FAQ</div><h2 className="serif">Frequently asked questions</h2>{topicContent.faqs.map((faq) => <details key={faq.question}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}</section>
     </div>
-    <style>{`.topic-page{padding:48px 0 72px}.topic-shell{max-width:1080px}.topic-breadcrumb{display:flex;gap:8px;color:var(--muted);font-size:13px;margin-bottom:34px}.topic-breadcrumb a{text-decoration:underline}.topic-page header{max-width:900px}.topic-page h1{font-size:clamp(3rem,7vw,5.5rem);line-height:.98;margin:10px 0 20px;text-wrap:balance}.topic-page header>p{font-size:20px;line-height:1.7;color:var(--muted);max-width:800px}.topic-jumps{display:flex;flex-wrap:wrap;gap:12px 22px;border-block:1px solid var(--line);padding:20px 0;margin:38px 0}.topic-jumps a{color:var(--teal-dark);font-weight:700}.topic-copy{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-bottom:64px}.topic-copy section{scroll-margin-top:100px}.topic-copy h2{font-size:28px;margin:0 0 12px}.topic-copy p,.topic-faq p{color:var(--muted);line-height:1.7}.topic-articles{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:24px}.topic-faq{max-width:800px;margin-top:70px;scroll-margin-top:100px}.topic-faq h2,#topic-articles{font-size:38px;margin:8px 0 22px}.topic-faq details{border-top:1px solid var(--line);padding:18px 0}.topic-faq summary{font-weight:800;cursor:pointer}.topic-faq p{margin:12px 0 0}@media(max-width:800px){.topic-copy,.topic-articles{grid-template-columns:1fr}.topic-copy{gap:8px}.topic-copy section{border-bottom:1px solid var(--line);padding:20px 0}}`}</style>
+    <style>{`.topic-page{padding:48px 0 72px}.topic-shell{max-width:1080px}.topic-breadcrumb{display:flex;gap:8px;color:var(--muted);font-size:13px;margin-bottom:34px}.topic-breadcrumb a{text-decoration:underline}.topic-page header{max-width:900px}.topic-page h1{font-size:clamp(3rem,7vw,5.5rem);line-height:.98;margin:10px 0 20px;text-wrap:balance}.topic-page header>p{font-size:20px;line-height:1.7;color:var(--muted);max-width:800px}.quick-answer{max-width:800px;border-left:3px solid var(--teal);padding:4px 0 4px 20px;margin:30px 0}.quick-answer strong{font-size:12px;text-transform:uppercase}.quick-answer p{color:var(--muted);line-height:1.65;margin:8px 0 0}.topic-jumps{display:flex;flex-wrap:wrap;gap:12px 22px;border-block:1px solid var(--line);padding:20px 0;margin:38px 0}.topic-jumps a{color:var(--teal-dark);font-weight:700}.topic-copy{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-bottom:64px}.topic-copy section{scroll-margin-top:100px}.topic-copy h2{font-size:28px;margin:0 0 12px}.topic-copy p,.topic-faq p{color:var(--muted);line-height:1.7}.article-group{margin-top:34px}.article-group h3{font-size:27px;margin:0}.topic-articles{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:18px}.topic-faq{max-width:800px;margin-top:70px;scroll-margin-top:100px}.topic-faq h2,#topic-articles{font-size:38px;margin:8px 0 22px}.topic-faq details{border-top:1px solid var(--line);padding:18px 0}.topic-faq summary{font-weight:800;cursor:pointer}.topic-faq p{margin:12px 0 0}@media(max-width:800px){.topic-copy,.topic-articles{grid-template-columns:1fr}.topic-copy{gap:8px}.topic-copy section{border-bottom:1px solid var(--line);padding:20px 0}}`}</style>
   </section>;
 }

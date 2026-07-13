@@ -9,13 +9,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...staticPages.map((path) => ({
       url: `${siteUrl}${path}`,
-      lastModified: new Date(),
       changeFrequency: path === "" ? ("weekly" as const) : ("monthly" as const),
       priority: path === "" ? 1 : 0.7,
     })),
     ...topics.map((topic) => ({
       url: `${siteUrl}/topics/${topic.slug}`,
-      lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.8,
     })),
