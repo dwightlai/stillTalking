@@ -10,6 +10,7 @@ const records = files.map((file) => {
   return {
     file,
     data,
+    content,
     words: content.trim().split(/\s+/).filter(Boolean).length,
   };
 });
@@ -106,6 +107,19 @@ for (const record of records) {
   const imagePath = path.join(process.cwd(), "public", record.data.image ?? "");
   if (!record.data.image?.startsWith("/images/") || !fs.existsSync(imagePath)) {
     errors.push(`${record.file}: referenced illustration does not exist in public/images`);
+  }
+  const topicLink = `/topics/${record.data.topic}`;
+  if (!record.content.includes(`](${topicLink})`)) {
+    errors.push(`${record.file}: missing contextual link to ${topicLink}`);
+  }
+  const articleLinks = [...record.content.matchAll(/\]\(\/articles\/([a-z0-9-]+)\)/g)].map((match) => match[1]);
+  const knownSlugs = new Set(records.map(({ file }) => file.replace(/\.mdx$/, "")));
+  if (articleLinks.filter((slug) => slug !== record.file.replace(/\.mdx$/, "")).length < 2) {
+    errors.push(`${record.file}: requires at least two contextual article links`);
+  }
+  for (const slug of articleLinks) {
+    if (!knownSlugs.has(slug)) errors.push(`${record.file}: broken internal article link ${slug}`);
+    if (slug === record.file.replace(/\.mdx$/, "")) errors.push(`${record.file}: self-link is not allowed`);
   }
 }
 
