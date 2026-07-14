@@ -126,3 +126,26 @@ test("publishes an ungated conversation script resource", () => {
     assert.match(source, new RegExp(phrase));
   assert.match(read("src/app/resources/page.tsx"), /\/resources\/conversation-scripts-for-parents/);
 });
+
+test("publishes the adult child living at home guide with evidence and reciprocal links", () => {
+  const articlePath = "content/articles/adult-child-living-at-home.mdx";
+  assert.equal(fs.existsSync(articlePath), true, "new guide should exist");
+  const source = fs.readFileSync(articlePath, "utf8");
+  const movingOut = read("content/articles/when-adult-child-moves-out.mdx");
+
+  assert.match(source, /title: "When Your Adult Child Lives at Home: Make It a Household, Not a Holding Pattern"/);
+  assert.match(source, /topic: "independence"/);
+  assert.match(source, /primaryKeyword: "adult child living at home"/);
+  assert.match(source, /status: "published"/);
+  assert.match(source, /publisher: "U\.S\. Census Bureau"/);
+  assert.match(source, /publisher: "Pew Research Center"/);
+  for (const href of [
+    "/topics/independence",
+    "/articles/when-adult-child-moves-out",
+    "/articles/financial-help-control",
+    "/topics/boundaries",
+  ]) {
+    assert.match(source, new RegExp(href.replaceAll("/", "\\/")));
+  }
+  assert.match(movingOut, /\/articles\/adult-child-living-at-home/);
+});
