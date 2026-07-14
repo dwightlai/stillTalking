@@ -149,3 +149,12 @@ test("publishes the adult child living at home guide with evidence and reciproca
   }
   assert.match(movingOut, /\/articles\/adult-child-living-at-home/);
 });
+
+test("features the adult child living at home guide on the homepage", () => {
+  const featured = fs
+    .readdirSync("content/articles")
+    .filter((file) => file.endsWith(".mdx"))
+    .filter((file) => /\r?\nfeatured: true\r?\n/.test(read(`content/articles/${file}`)));
+
+  assert.deepEqual(featured, ["adult-child-living-at-home.mdx"]);
+});
