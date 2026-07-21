@@ -174,6 +174,7 @@ test("publishes the evidence-checked everyday heart risks guide", () => {
   assert.match(source, /AED/);
   assert.doesNotMatch(source, /call 120/i);
   assert.doesNotMatch(source, /annual (?:ECG|EKG)/i);
+  assert.doesNotMatch(source, /mp\.weixin\.qq\.com|老赵讲道理/);
   for (const href of [
     "/topics/communication",
     "/articles/summer-heat-and-your-aging-parent",
