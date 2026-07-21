@@ -158,3 +158,27 @@ test("features the adult child living at home guide on the homepage", () => {
 
   assert.deepEqual(featured, ["adult-child-living-at-home.mdx"]);
 });
+
+test("publishes the evidence-checked everyday heart risks guide", () => {
+  const articlePath = "content/articles/everyday-heart-risks-older-adults.mdx";
+  assert.equal(fs.existsSync(articlePath), true, "new heart-health guide should exist");
+  const source = read(articlePath);
+
+  assert.match(source, /topic: "communication"/);
+  assert.match(source, /primaryKeyword: "heart attack warning signs in older adults"/);
+  assert.match(source, /publisher: "Centers for Disease Control and Prevention"/);
+  assert.match(source, /publisher: "American Heart Association"/);
+  assert.match(source, /publisher: "U\.S\. Preventive Services Task Force"/);
+  assert.match(source, /call 911/i);
+  assert.match(source, /CPR/);
+  assert.match(source, /AED/);
+  assert.doesNotMatch(source, /call 120/i);
+  assert.doesNotMatch(source, /annual (?:ECG|EKG)/i);
+  for (const href of [
+    "/topics/communication",
+    "/articles/summer-heat-and-your-aging-parent",
+    "/articles/concern-becomes-control",
+  ]) {
+    assert.match(source, new RegExp(href.replaceAll("/", "\\/")));
+  }
+});
